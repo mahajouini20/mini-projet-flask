@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Catalogue Produits{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-shopping-bag"></i> Nos Produits</h1>
+                    <p class="text-muted">Découvrez notre sélection de produits informatiques</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('voir_panier') }}" class="btn btn-primary btn-lg position-relative">
+                        <i class="fas fa-shopping-cart"></i> Mon Panier
+                        {% if session.get('panier') %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ session.get('panier')|length }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Catalogue produits -->
+    <div class="row">
+        {% for produit in produits %}
+        <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+            <div class="card h-100 shadow-sm product-card">
+                <!-- Image produit -->
+                <div class="position-relative">
+                    {% if produit.photo %}
+                    <img src="/static/{{ produit.photo }}" class="card-img-top" alt="{{ produit.Lib }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <i class="fas fa-box fa-5x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Badge stock -->
+                    {% if produit.QteS == 0 %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-danger">Rupture</span>
+                    {% elif produit.QteS <= produit.Seuil %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark">Stock limité</span>
+                    {% else %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-success">En stock</span>
+                    {% endif %}
+                </div>
+
+                <div class="card-body d-flex flex-column">
+                    <!-- Nom produit -->
+                    <h5 class="card-title">{{ produit.Lib }}</h5>
+                    
+                    <!-- Code produit -->
+                    <p class="text-muted small mb-2">Réf: {{ produit.CodP }}</p>
+                    
+                    <!-- Stock -->
+                    <p class="mb-2">
+                        <i class="fas fa-warehouse"></i> 
+                        <strong>{{ produit.QteS }}</strong> disponible(s)
+                    </p>
+                    
+                    <!-- Prix -->
+                    <div class="mb-3 mt-auto">
+                        <h3 class="text-primary mb-0">{{ "{:,.3f}".format(produit.PU) }} DT</h3>
+                        <small class="text-muted">Prix unitaire</small>
+                    </div>
+                    
+                    <!-- Formulaire ajout panier -->
+                    <form method="POST" action="{{ url_for('ajouter_panier') }}" class="mt-auto">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="produit_id" value="{{ produit.CodP }}">
+                        
+                        <div class="input-group mb-2">
+                            <span class="input-group-text">Quantité</span>
+                            <input type="number" name="quantite" class="form-control" value="1" min="1" max="{{ produit.QteS }}" 
+                                   {% if produit.QteS == 0 %}disabled{% endif %}>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100" {% if produit.QteS == 0 %}disabled{% endif %}>
+                            <i class="fas fa-cart-plus"></i> 
+                            {% if produit.QteS == 0 %}
+                            Indisponible
+                            {% else %}
+                            Ajouter au panier
+                            {% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle fa-3x mb-3"></i>
+                <h4>Aucun produit disponible</h4>
+                <p>Revenez plus tard pour découvrir nos nouveaux produits.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.product-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+}
+
+.card-img-top {
+    border-bottom: 1px solid #dee2e6;
+}
+</style>
+{% endblock %}

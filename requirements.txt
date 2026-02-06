@@ -1,0 +1,38 @@
+# Requirements.txt - Mini-Projet Flask Complet
+# Toutes les dépendances pour les 6 phases
+
+# Core Flask
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Base de données
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.23
+PyMySQL==1.1.0
+cryptography==41.0.7
+
+# Authentification et Sécurité
+Flask-Login==0.6.3
+Flask-WTF==1.2.1
+WTForms==3.1.1
+email-validator==2.1.0
+PyJWT==2.8.0
+
+# Email
+Flask-Mail==0.9.1
+
+# Upload de fichiers
+Flask-Uploads==0.2.1
+Flask-Reuploaded==1.3.0
+
+# Protection CSRF et Rate Limiting
+Flask-Limiter==3.5.0
+
+# Administration (Phase 5)
+Flask-Admin==1.6.1
+
+# Variables d'environnement
+python-dotenv==1.0.0
+
+# Outils de développement
+python-dateutil==2.8.2

@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Détails Commande {{ commande.NumC }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('admin_commandes') }}">Commandes</a></li>
+            <li class="breadcrumb-item active">{{ commande.NumC }}</li>
+        </ol>
+    </nav>
+
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="fas fa-shopping-cart me-2"></i>Commande {{ commande.NumC }}
+            </h2>
+            <p class="text-muted mb-0">Détails complets de la commande</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin_commandes') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Retour
+            </a>
+            {% if commande.NumF %}
+            <a href="{{ url_for('detail_facture', NumF=commande.NumF) }}" class="btn btn-success">
+                <i class="fas fa-file-invoice me-2"></i>Voir la facture
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Informations générales -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Numéro de commande</small>
+                        <strong class="fs-5 text-primary">{{ commande.NumC }}</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Date de commande</small>
+                        <strong><i class="fas fa-calendar me-2"></i>{{ commande.DatC.strftime('%d/%m/%Y') }}</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Client</small>
+                        <strong>{{ client.NomC }}</strong>
+                        <br>
+                        <small class="text-muted">Code: {{ client.CodC }}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Email</small>
+                        <a href="mailto:{{ client.Email }}">{{ client.Email }}</a>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Adresse</small>
+                        <span>{{ client.AdrC }}</span>
+                    </div>
+                    
+                    <div>
+                        <small class="text-muted d-block">Facture associée</small>
+                        {% if commande.NumF %}
+                        <a href="{{ url_for('detail_facture', NumF=commande.NumF) }}" class="badge bg-success">
+                            <i class="fas fa-file-invoice me-1"></i>#{{ commande.NumF }}
+                        </a>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">Aucune facture</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produits commandés -->
+        <div class="col-md-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-box me-2"></i>Produits commandés</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Produit</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-end">Prix unitaire</th>
+                                    <th class="text-end">Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in details %}
+                                <tr>
+                                    <td><span class="badge bg-secondary">{{ detail.CodP }}</span></td>
+                                    <td>
+                                        <strong>{{ detail.Lib }}</strong>
+                                        {% if detail.photo %}
+                                        <br>
+                                        <img src="{{ url_for('static', filename=detail.photo) }}" 
+                                             alt="{{ detail.Lib }}" 
+                                             style="height: 40px; width: auto;"
+                                             class="mt-1">
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info">{{ detail.QteC }}</span>
+                                    </td>
+                                    <td class="text-end">{{ "{:,.3f}".format(detail.PU) }} DT</td>
+                                    <td class="text-end">
+                                        <strong class="text-primary">{{ "{:,.3f}".format(detail.montant_ligne) }} DT</strong>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot class="table-light">
+                                <tr>
+                                    <td colspan="4" class="text-end"><strong>Total HT:</strong></td>
+                                    <td class="text-end">
+                                        <strong class="text-success fs-5">{{ "{:,.3f}".format(montant_total) }} DT</strong>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Actions disponibles</h5>
+        </div>
+        <div class="card-body">
+            <div class="d-flex gap-2">
+                {% if commande.NumF %}
+                <a href="{{ url_for('detail_facture', NumF=commande.NumF) }}" class="btn btn-success">
+                    <i class="fas fa-file-invoice me-2"></i>Voir la facture
+                </a>
+                {% endif %}
+                
+                <a href="{{ url_for('factures_client', CodC=client.CodC) }}" class="btn btn-info">
+                    <i class="fas fa-list me-2"></i>Toutes les factures du client
+                </a>
+                
+                <a href="{{ url_for('totQteC_Client', CodC_id=client.CodC) }}" class="btn btn-primary">
+                    <i class="fas fa-chart-bar me-2"></i>Historique du client
+                </a>
+                
+                <button class="btn btn-danger ms-auto" onclick="deleteCommande('{{ commande.NumC }}')">
+                    <i class="fas fa-trash me-2"></i>Supprimer la commande
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer la commande <strong>{{ commande.NumC }}</strong> ?</p>
+                <p class="text-danger">
+                    <i class="fas fa-warning me-2"></i>Cette action supprimera aussi les produits associés et est irréversible.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form action="{{ url_for('admin_delete_commande', NumC=commande.NumC) }}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function deleteCommande(numC) {
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

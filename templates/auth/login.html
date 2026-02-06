@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion - Gestion Commerciale{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-sign-in-alt fa-3x text-primary"></i>
+                    <h3 class="mt-3">Connexion</h3>
+                    <p class="text-muted">Connectez-vous à votre compte</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('login') }}" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""), placeholder="Nom d'utilisateur") }}
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), placeholder="Mot de passe") }}
+                        {% if form.password.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label") }}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="mb-2">
+                        <a href="{{ url_for('reset_password_request') }}" class="text-decoration-none">
+                            <i class="fas fa-key"></i> Mot de passe oublié ?
+                        </a>
+                    </p>
+                    <p class="mb-0">
+                        Pas encore de compte ?
+                        <a href="{{ url_for('register') }}" class="text-decoration-none">
+                            <i class="fas fa-user-plus"></i> S'inscrire
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Info box pour le compte admin par défaut -->
+        <div class="alert alert-info mt-3" role="alert">
+            <h6><i class="fas fa-info-circle"></i> Compte de test</h6>
+            <p class="mb-0">
+                <strong>Admin:</strong> admin / admin123<br>
+                <small>À changer en production!</small>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

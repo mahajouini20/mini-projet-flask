@@ -1,0 +1,146 @@
+envoyer_em<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envoyer Email - Client {{ client.CodC }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #28a745;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .client-info {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .client-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .email-display {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .warning strong {
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Envoyer un Email au Client</h1>
+        
+        <div class="client-info">
+            <p><strong>Client :</strong> {{ client.CodC }} - {{ client.NomC }}</p>
+            <p><strong>Adresse :</strong> {{ client.AdrC }}</p>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Important :</strong> Un email contenant le résumé des commandes de ce client sera envoyé à l'adresse ci-dessous.
+        </div>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label>Email du destinataire :</label>
+                <div class="email-display">
+                    {{ client.Email }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Contenu de l'email :</label>
+                <ul style="color: #666; line-height: 1.8;">
+                    <li>Résumé des commandes du client</li>
+                    <li>Liste des produits commandés avec quantités</li>
+                    <li>Mise en forme professionnelle en HTML</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary">
+                    ✉️ Envoyer l'email
+                </button>
+                <a href="/totQteC_Client/{{ client.CodC }}" class="btn btn-secondary">
+                    ← Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

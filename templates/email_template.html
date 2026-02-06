@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résumé Commandes - Client {{ client.NomC }}</title>
+</head>
+<body>
+    <h2>Bonjour {{ client.NomC }},</h2>
+    <p>Voici le résumé de vos commandes :</p>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Code Produit</th>
+            <th>Libellé</th>
+            <th>Quantité</th>
+        </tr>
+        {% for produit in resultats %}
+        <tr>
+            <td>{{ produit.CodP }}</td>
+            <td>{{ produit.Lib }}</td>
+            <td>{{ produit.total_qte }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

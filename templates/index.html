@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application de Suivi des Commandes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .clients-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .client-item {
+            background-color: #f8f9fa;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+            transition: all 0.3s;
+        }
+        
+        .client-item:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .client-item a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        
+        .client-code {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Application de Suivi des Factures et Commandes</h1>
+        
+        <h2>Liste des Clients</h2>
+        <ul class="clients-list">
+            {% for client in clients %}
+            <li class="client-item">
+                <a href="/totQteC_Client/{{ client.CodC }}">
+                    <span class="client-code">{{ client.CodC }}</span> - 
+                    {{ client.NomC }} ({{ client.AdrC }})
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

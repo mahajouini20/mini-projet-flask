@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Upload Photo{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="fas fa-camera"></i> Upload Photo : {{ produit.Lib }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.photo.label }}
+            {{ form.photo(class="form-control") }}
+        </div>
+
+        <button class="btn btn-warning">Télécharger</button>
+        <a href="{{ url_for('admin_produits') }}" class="btn btn-secondary">Retour</a>
+    </form>
+</div>
+{% endblock %}

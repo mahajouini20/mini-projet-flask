@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+  <div class="row g-0">
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="col-md-10 p-4 main-content">
+
+      <!-- HEADER -->
+      <div class="mb-4">
+        <h2 class="fw-bold">Dashboard Administrateur</h2>
+        <p class="text-muted">Vue générale de la gestion commerciale</p>
+      </div>
+
+      <!-- ================= STAT CARDS ================= -->
+      <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+          <div class="card stat-card bg-primary text-white">
+            <div class="card-body">
+              <i class="fas fa-users fa-2x mb-2"></i>
+              <h6>Total Clients</h6>
+              <h2>{{ total_clients }}</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card stat-card bg-success text-white">
+            <div class="card-body">
+              <i class="fas fa-file-invoice fa-2x mb-2"></i>
+              <h6>Total Factures</h6>
+              <h2>{{ total_factures }}</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card stat-card bg-warning text-dark">
+            <div class="card-body">
+              <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+              <h6>Total Commandes</h6>
+              <h2>{{ total_commandes }}</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card stat-card bg-danger text-white">
+            <div class="card-body">
+              <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+              <h6>Chiffre d'affaires</h6>
+              <h2>{{ "{:,.0f}".format(ca_total) }} DT</h2>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= CHARTS ================= -->
+      <div class="row g-3 mb-4">
+
+        <!-- CA LINE CHART -->
+        <div class="col-lg-7">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>CA des 12 derniers mois</h5>
+              <canvas id="caChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP Fournisseurs -->
+        <div class="col-lg-5">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>Top 5 CLIENTS</h5>
+
+              {% for client in top_clients[:5] %}
+              <div class="d-flex justify-content-between border-bottom py-2">
+                <span>{{ client.NomC }}</span>
+                <strong>{{ "{:,.0f}".format(client.ca) }} DT</strong>
+              </div>
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= FACTURES + PRODUITS ================= -->
+      <div class="row g-3">
+
+        <!-- FACTURES DONUT -->
+        <div class="col-lg-5">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>Statut des Factures</h5>
+              <canvas id="facturesChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUITS ALERTES -->
+        <div class="col-lg-7">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>Produits en Alerte</h5>
+
+              {% if produits_alerte %}
+              <table class="table table-hover mt-3">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Produit</th>
+                    <th>Stock</th>
+                    <th>Seuil</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for p in produits_alerte[:5] %}
+                  <tr>
+                    <td>{{ p.CodP }}</td>
+                    <td>{{ p.Lib }}</td>
+                    <td>
+                      <span class="badge bg-danger">{{ p.QteS }}</span>
+                    </td>
+                    <td>{{ p.Seuil }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              {% else %}
+              <div class="alert alert-success mt-3">
+                Aucun produit en alerte 👍
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= CSS STYLE ================= -->
+<style>
+.sidebar-admin {
+  background: #111827;
+  min-height: 100vh;
+}
+
+.sidebar-admin .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 15px;
+  transition: 0.3s;
+}
+
+.sidebar-admin .nav-link:hover,
+.sidebar-admin .nav-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.sidebar-admin i {
+  width: 25px;
+}
+
+.stat-card {
+  border-radius: 15px;
+  transition: 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+canvas {
+  max-height: 250px;
+}
+</style>
+
+{% endblock %}
+
+
+<!-- ================= JS CHARTS ================= -->
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/* ========= CA CHART ========= */
+const caData = {{ ca_mensuel | tojson }};
+const labelsCA = caData.map(x => x.mois);
+const valuesCA = caData.map(x => x.ca);
+
+new Chart(document.getElementById("caChart"), {
+  type: "line",
+  data: {
+    labels: labelsCA,
+    datasets: [{
+      label: "CA (DT)",
+      data: valuesCA,
+      borderWidth: 3,
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true }
+    }
+  }
+});
+
+
+/* ========= FACTURES DONUT ========= */
+new Chart(document.getElementById("facturesChart"), {
+  type: "doughnut",
+  data: {
+    labels: ["En attente", "Payées", "Annulées"],
+    datasets: [{
+      data: [
+        {{ factures_en_attente }},
+        {{ factures_payees }},
+        {{ factures_annulees }}
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom"
+      }
+    }
+  }
+});
+</script>
+{% endblock %}

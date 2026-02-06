@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des Fournisseurs - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-users"></i> Gestion des Fournisseurs</h1>
+        <a href="{{ url_for('admin_add_client') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Nouveau fournisseur
+        </a>
+    </div>
+    
+    {% if clients %}
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Code</th>
+                            <th>Nom</th>
+                            <th>Adresse</th>
+                            <th>Email</th>
+                            <th>Crédit</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td><strong>{{ client.CodC }}</strong></td>
+                            <td>{{ client.NomC }}</td>
+                            <td>{{ client.AdrC }}</td>
+                            <td>
+                                {% if client.Email %}
+                                <a href="mailto:{{ client.Email }}">{{ client.Email }}</a>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ "{:,.0f}".format(client.CreditC) }} DT</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a  href="{{ url_for('admin_edit_client', CodC=client.CodC) }}" class="btn btn-sm btn-info" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+<form method="POST" action="{{ url_for('admin_delete_client', CodC=client.CodC) }}" style="display:inline-block;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce client ?');">
+        <i class="fas fa-trash"></i>
+    </button>
+</form>
+
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucun fournisseur trouvé.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

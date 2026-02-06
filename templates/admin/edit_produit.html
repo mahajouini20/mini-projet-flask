@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Modifier Produit{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="fas fa-edit"></i> Modifier Produit : {{ produit.Lib }}</h2>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.Lib.label }} {{ form.Lib(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.PU.label }} {{ form.PU(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.QteS.label }} {{ form.QteS(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.Seuil.label }} {{ form.Seuil(class="form-control") }}
+        </div>
+
+        <button class="btn btn-success">Enregistrer</button>
+        <a href="{{ url_for('admin_produits') }}" class="btn btn-secondary">Retour</a>
+    </form>
+</div>
+{% endblock %}
