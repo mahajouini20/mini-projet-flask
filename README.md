@@ -1,10 +1,9 @@
 # 🛒 E-Commerce Flask - Système de Gestion Complet
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![Flask](https://img.shields.io/badge/Flask-3.0+-green.svg)
-![MySQL](https://img.shields.io/badge/MySQL-8.0+-orange.svg)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+## 📸  Vidéo de démonstration
+
+[Regarder la vidéo](https://drive.google.com/file/d/1wCnikBYAiIEOVwsTS-dm6ClXCH-TbBFJ/view?usp=sharing)
+
 
 Système complet de gestion e-commerce développé avec Flask, incluant la gestion des produits, commandes, factures, utilisateurs et profils avec photos.
 
@@ -414,11 +413,6 @@ Content-Type: application/json
 }
 ```
 
-## 📸 Présentation des interfaces 
-
-<video width="400" controls>
-  <source src="videos/mini_projet.mp4" type="video/mp4">
-</video>
 
 
 ## 🔒 Sécurité
@@ -436,5 +430,6 @@ Content-Type: application/json
 - ✅ **Mots de passe forts** (minimum 6 caractères)
 
 </div>
+
 
 
