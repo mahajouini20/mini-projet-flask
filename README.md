@@ -414,22 +414,12 @@ Content-Type: application/json
 }
 ```
 
-## 📸 Captures d'écran
+## 📸 Présentation des interfaces 
 
-### Dashboard Admin
-![Dashboard](docs/screenshots/dashboard.png)
+<video width="400" controls>
+  <source src="videos/mini_projet.mp4" type="video/mp4">
+</video>
 
-### Catalogue Produits
-![Catalogue](docs/screenshots/catalogue.png)
-
-### Gestion des Utilisateurs
-![Users](docs/screenshots/users.png)
-
-### Panier
-![Panier](docs/screenshots/panier.png)
-
-### Profil
-![Profil](docs/screenshots/profil.png)
 
 ## 🔒 Sécurité
 
@@ -446,4 +436,5 @@ Content-Type: application/json
 - ✅ **Mots de passe forts** (minimum 6 caractères)
 
 </div>
+
 
