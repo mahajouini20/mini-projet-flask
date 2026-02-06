@@ -21,12 +21,6 @@ Système complet de gestion e-commerce développé avec Flask, incluant la gesti
 - [Utilisation](#-utilisation)
 - [API REST](#-api-rest)
 - [Captures d'écran](#-captures-décran)
-- [Contribuer](#-contribuer)
-- [Auteurs](#-auteurs)
-- [Licence](#-licence)
-
----
-
 ## ✨ Fonctionnalités
 
 ### 🔐 Authentification & Sécurité
@@ -452,3 +446,4 @@ Content-Type: application/json
 - ✅ **Mots de passe forts** (minimum 6 caractères)
 
 </div>
+
