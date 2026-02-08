@@ -2,7 +2,10 @@
 
 ## 📸  Vidéo de démonstration
 
-[Regarder la vidéo](https://drive.google.com/file/d/1wCnikBYAiIEOVwsTS-dm6ClXCH-TbBFJ/view?usp=sharing)
+Ce lien contient une présentation vidéo du projet : https://drive.google.com/file/d/1wCnikBYAiIEOVwsTS-dm6ClXCH-TbBFJ/view?usp=sharing 
+Une fois le fichier .zip téléchargé, la vidéo sera disponible à l’intérieur.
+
+
 
 
 Système complet de gestion e-commerce développé avec Flask, incluant la gestion des produits, commandes, factures, utilisateurs et profils avec photos.
@@ -430,6 +433,7 @@ Content-Type: application/json
 - ✅ **Mots de passe forts** (minimum 6 caractères)
 
 </div>
+
 
 
 
